@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <script>
+        function data(data) {
+            for (let i = 0; i < data.length; i++)
+                if (data[i] == '' || data[i] == null || data[i] == 'undefined') {
+                    console.log('kosong');
+                } else {
+                    console.log(data[i]);
+                }
+
+
+        }
+        data(['dd', '', '732798', 'hjhshd']);
+    </script>
+</body>
+
+</html>

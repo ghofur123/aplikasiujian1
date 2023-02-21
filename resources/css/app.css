@@ -1,0 +1,14 @@
+
+@media only screen and (min-width: 993px) {
+  .sidenav-trigger {
+    display: inline-block;
+  }
+}
+.autocomplete-collection,
+input[name="ref_jurusan_id"],
+input[name="ref_nama_jurusan"],
+.div-class-hidden,
+.input-class-hidden
+{
+    display: none;
+}
