@@ -35,6 +35,38 @@ export function submitFormText(name, linkPost, callback) {
         return false;
     });
 }
+export function ajaxProsesTextByData(name, linkPost, dataArray, callback) {
+    e.preventDefault();
+
+    let actionShowClass = ['.progress'];
+    actionShow(actionShowClass);
+
+    let hasBeenProcessed = false;
+
+    $.ajax({
+        type: 'POST',
+        url: linkPost,
+        data: dataArray,
+        beforeSend: function () {
+            //
+            // memastikan hanya proses 1 x
+            if (! hasBeenProcessed) {
+                hasBeenProcessed = true;
+                return true;
+            } else {
+                return false;
+            }
+        },
+        success: function (data) {
+            if (callback && typeof(callback) === "function") {
+                callback(data);
+            }
+            let actionHideClass = ['.progress'];
+            actionHide(actionHideClass);
+        }
+    }).done(function () {});
+    return false;
+}
 export function submitUploadFile(name, linkPost, callback) {
     $(document).on('submit', 'form[name="' + name + '"]', function (e) {
         e.preventDefault();

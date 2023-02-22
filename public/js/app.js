@@ -2248,6 +2248,24 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '.btn-modal-
 (0,_autocomplete__WEBPACK_IMPORTED_MODULE_9__.autoComplateRefJurusan)(function () {});
 (0,_autocomplete__WEBPACK_IMPORTED_MODULE_9__.autoComplateRefMapel)(function () {});
 (0,_login__WEBPACK_IMPORTED_MODULE_8__.loginForm)();
+jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '.collapsible-click-class', function () {
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').show();
+  var bankSoalId = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data');
+  var idDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data1');
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#collapsible-id-' + idDiv).load('view-soal-in-ujian/' + bankSoalId, function () {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
+  });
+});
+jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('change', 'input[name="id-soal"]', function () {
+  var soalId = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).val();
+  var ujianId = jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name="ujian_id_input"]').val();
+  console.log(soalId + "-----" + ujianId);
+  if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).is(':checked')) {
+    console.log('Checkbox is checked');
+  } else {
+    console.log('Checkbox is unchecked');
+  }
+});
 
 /***/ }),
 

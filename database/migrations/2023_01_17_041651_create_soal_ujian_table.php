@@ -15,6 +15,7 @@ class CreateSoalUjianTable extends Migration
     {
         Schema::create('soal_ujian', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('uniq')->unique();
             $table->unsignedBigInteger('ujian_id');
             $table->unsignedBigInteger('soal_id');
             $table->foreign('ujian_id')->references('id')->on('ujian')->onDelete('cascade');

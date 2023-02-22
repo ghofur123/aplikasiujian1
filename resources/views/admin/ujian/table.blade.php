@@ -34,7 +34,7 @@
                         <td>{{ $item->status }}</td>
                         <td>{{ $item->metode }}</td>
                         <td>
-                            <a class="waves-effect waves-light btn menu-item" link="soal-ujian">Pilih Soal</a>
+                            <a class="waves-effect waves-light btn menu-item" link="pilih-soal/{{$item->id}}">Pilih Soal</a>
                             <a class="waves-effect waves-light btn btn-modal-class modal-trigger" href="#modal1" link="ujian/{{ Crypt::encrypt($item->id) }}"><i class="material-icons left">border_color</i></a>
                             <button class="waves-effect red darken-1 btn" name="ujian-delete-btn" data="{{ Crypt::encrypt($item->id) }}" link="ujian"><i class="material-icons left">clear</i></button>
                         </td>

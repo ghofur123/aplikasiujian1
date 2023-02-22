@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\BankSoalPilihan;
+use App\Models\Soal;
 use App\Models\Soal_ujian;
 use App\Models\SoalUjian;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class SoalUjianController extends Controller
 {
@@ -15,10 +18,11 @@ class SoalUjianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $data = array(
             'title' => 'Soal Ujian',
+            'ujian_id' => $request->id,
             'BankSoalPilihan' => BankSoalPilihan::with('mapel')->latest()->get()
         );
         return view('admin.soal_ujian.table', $data);
@@ -29,9 +33,14 @@ class SoalUjianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $data = array(
+            'data' => Soal::where([
+                'bank_soal_pilihan_id' => Crypt::decrypt($request->id)
+            ])->latest()->get()
+        );
+        return view('admin.soal_ujian.view_soal', $data);
     }
 
     /**
@@ -42,7 +51,30 @@ class SoalUjianController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validation = Validator($request->all(), [
+            'ujian_id' => 'required',
+            'soal_id' => 'required',
+        ]);
+
+        if ($validation->fails()) {
+            return response([
+                'success' => false,
+                'message' => $validation->errors()
+            ]);
+        }
+
+        $data = array(
+            'ujian_id' => $request->ujian_id,
+            'soal_id' => $request->soal_id,
+            'created_at' => Carbon::now('Asia/Jakarta'),
+        );
+
+        SoalUjian::insert($data);
+
+        return response([
+            'success' => true,
+            'message' => 'success',
+        ]);
     }
 
     /**

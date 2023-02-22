@@ -39,8 +39,8 @@ Route::middleware(['web', 'auth:sanctum'])->group(function () {
 });
 
 
-Route::get('/login', [LoginController::class, 'index']);
-Route::post('/login', [LoginController::class, 'login']);
+// Route::get('/login', [LoginController::class, 'index']);
+// Route::post('/login', [LoginController::class, 'login']);
 // 
 Route::get('/', [DashboardController::class, 'index']);
 // 
@@ -102,6 +102,10 @@ Route::get('/ujian/{id}', [UjianController::class, 'show']);
 Route::put('/ujian', [UjianController::class, 'update']);
 Route::delete('/ujian', [UjianController::class, 'destroy']);
 Route::get('/ujian/form/store', [UjianController::class, 'create']);
+// proses lanjut dari ujian
+Route::get('/pilih-soal/{id}', [SoalUjianController::class, 'index']);
+Route::get('/view-soal-in-ujian/{id}', [SoalUjianController::class, 'create']);
+
 // 
 Route::get('/bank-soal-pilihan', [BankSoalPilihanController::class, 'index']);
 Route::post('/bank-soal-pilihan', [BankSoalPilihanController::class, 'store']);
@@ -116,8 +120,6 @@ Route::get('/soal/{id}', [SoalController::class, 'show']);
 Route::put('/soal', [SoalController::class, 'update']);
 Route::delete('/soal', [SoalController::class, 'destroy']);
 Route::get('/soal/form/store/{bank_soal_pilihan_id}', [SoalController::class, 'create']);
-// 
-Route::get('/soal-ujian', [SoalUjianController::class, 'index']);
 // 
 Route::get('/soal-import/form', [SoalImportController::class, 'soalImportForm']);
 Route::post('/soal-import/import/excel', [SoalImportController::class, 'soalImport']);
