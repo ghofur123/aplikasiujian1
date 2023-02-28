@@ -52,6 +52,11 @@
             <i class="material-icons">add_to_queue</i>Nilai
         </a>
     </li>
+    <li class="menu-item" link="users">
+        <a href="#">
+            <i class="material-icons">account_circle</i>Users
+        </a>
+    </li>
     <li>
         <div class="divider"></div>
     </li>
@@ -61,4 +66,13 @@
             <i class="material-icons">build</i>Pengaturan
         </a>
     </li>
+    <li class="menu-item" link="logout">
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="material-icons">build</i>Log out
+        </a>
+    </li>
+
 </ul>
+<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+    @csrf
+</form>

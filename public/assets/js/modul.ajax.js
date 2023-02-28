@@ -204,3 +204,18 @@ export function submitFormCkEditor(name, link, method, callback) {
         return false;
     });
 }
+export function AjaxProsessData(link, data, callback) {
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: link + '/' + data,
+        type: 'GET',
+        data: data,
+        success: function (data) {
+            if (callback && typeof(callback) === "function") {
+                callback(data);
+            }
+        }
+    });
+}

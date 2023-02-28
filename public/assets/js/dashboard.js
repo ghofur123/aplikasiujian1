@@ -25,6 +25,9 @@ import {updateDataAll} from './update';
 import {uplodaFileAll} from './upload.file';
 import {deleteAll} from './delete';
 import {loginForm} from './login';
+import {viewAll} from './view.data';
+import {prosesComplex} from './proses.complex';
+
 import {autoComplateLembaga, autoComplateRefJurusan, autoComplateRefMapel} from './autocomplete';
 
 
@@ -81,7 +84,8 @@ autoComplateLembaga(function () {});
 autoComplateRefJurusan(function () {});
 autoComplateRefMapel(function () {});
 loginForm();
-
+viewAll();
+prosesComplex();
 $(document).on('click', '.collapsible-click-class', function () {
     $('.progress').show();
     let bankSoalId = $(this).attr('data');
@@ -118,5 +122,8 @@ $(document).on('change', 'input[name="id-soal"]', function () {
         $('.progress').hide();
     });
     return false;
-
+});
+$(document).on('change', 'select[name="pilih-role"]', function () {
+    let valueData = $(this).val();
+    console.log(valueData);
 });

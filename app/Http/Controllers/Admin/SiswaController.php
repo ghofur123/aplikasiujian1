@@ -20,11 +20,23 @@ class SiswaController extends Controller
     {
         $data = array(
             'title' => 'siswa',
-            'data' => Siswa::with('kelas')->latest()->get()
+            'kelas' => Kelas::orderBy('nama_kelas', 'ASC')->get(),
+        );
+        return view('admin.siswa.home', $data);
+    }
+
+    public function view(Request $request)
+    {
+        $data = array(
+            'data' => Siswa::with('kelas')
+                ->where([
+                    'kelas_id' => Crypt::decrypt($request->id)
+                ])
+                ->latest()
+                ->get()
         );
         return view('admin.siswa.table', $data);
     }
-
     /**
      * Show the form for creating a new resource.
      *

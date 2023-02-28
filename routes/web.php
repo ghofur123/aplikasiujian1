@@ -20,6 +20,8 @@ use App\Http\Controllers\Admin\BankSoalPilihanController;
 use App\Http\Controllers\Admin\SoalController;
 use App\Http\Controllers\Admin\SoalImportController;
 use App\Http\Controllers\Admin\SoalUjianController;
+use App\Http\Controllers\Admin\UsersController;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +44,7 @@ Route::middleware(['web', 'auth:sanctum'])->group(function () {
 // Route::get('/login', [LoginController::class, 'index']);
 // Route::post('/login', [LoginController::class, 'login']);
 // 
-Route::get('/', [DashboardController::class, 'index']);
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 // 
 Route::get('/lembaga', [LembagaController::class, 'index']);
 Route::get('/lembaga/{id}', [LembagaController::class, 'show']);
@@ -94,6 +96,9 @@ Route::put('/siswa', [SiswaController::class, 'update']);
 Route::delete('/siswa', [SiswaController::class, 'destroy']);
 Route::get('/siswa/form/store', [SiswaController::class, 'create']);
 
+Route::get('/siswa/view/{id}', [SiswaController::class, 'view']);
+// 
+
 Route::post('/siswa-import-excel', [SiswaImportController::class, 'siswaImport']);
 // 
 Route::get('/ujian', [UjianController::class, 'index']);
@@ -124,6 +129,10 @@ Route::get('/soal/form/store/{bank_soal_pilihan_id}', [SoalController::class, 'c
 Route::get('/soal-import/form', [SoalImportController::class, 'soalImportForm']);
 Route::post('/soal-import/import/excel', [SoalImportController::class, 'soalImport']);
 // 
+Route::get('/users', [UsersController::class, 'index']);
+Route::get('/users/get/{kelas_id}', [UsersController::class, 'store']);
+Route::get('/users/pdf/{kelas_id}', [UsersController::class, 'create']);
+// 
 Route::get('/download-file/{name}', [DownloadController::class, 'download']);
 // 
 Route::get('/component/form/ref/jurusan', [ComponentController::class, 'componentFormJurusan']);
@@ -137,3 +146,7 @@ Route::get('/component/mapel/{search}', [ComponentController::class, 'refMataPel
 Route::get('/lembaga-form', [StoreFormController::class, 'lembaga']);
 Route::get('/guru-form-excel', [StoreFormController::class, 'guruExcel']);
 Route::get('/siswa-form-excel', [StoreFormController::class, 'siswaExcel']);
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
