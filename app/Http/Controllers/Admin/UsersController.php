@@ -46,8 +46,9 @@ class UsersController extends Controller
     public function store(Request $request)
     {
         $data = Siswa::select(
+            'siswa.id',
             'siswa.nama as name',
-            DB::raw('CONCAT(siswa.id,siswa.nisn,"@", REPLACE(lembaga.nama_lembaga, " ", "."), ".sch.id") as email'),
+            DB::raw('CONCAT(siswa.id,"-",siswa.nisn,"@", REPLACE(lembaga.nama_lembaga, " ", "."), ".sch.id") as email'),
             'siswa.nik as password'
         )
             ->join('kelas', 'siswa.kelas_id', '=', 'kelas.id')
@@ -62,7 +63,8 @@ class UsersController extends Controller
                 'name' => $item->name,
                 'email' => $item->email,
                 'password' => bcrypt($item->password),
-                'role' => 'siswa'
+                'role' => 'siswa',
+                'id_pengguna' => $item->id
             ];
         }
         // mengabaikan data yang sudah ada

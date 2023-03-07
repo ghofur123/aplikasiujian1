@@ -17,7 +17,7 @@
             <a class='dropdown-trigger btn' href='#' data-target='dropdown-users'>Users Data</a>
             <ul id='dropdown-users' class='dropdown-content'>
                 <li id="create-users-siswa" data=""><a href="#">Create Users</a></li>
-                <li><a href="#">Download Users</a></li>
+                <li id="kartu-siswa-class" data=""><a href="#">Kartu Siswa</a></li>
             </ul>
         </div>
         <div class="card-content">

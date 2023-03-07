@@ -36,10 +36,14 @@ class SoalUjianController extends Controller
     public function create(Request $request)
     {
         $data = array(
-            'data' => Soal::where([
-                'bank_soal_pilihan_id' => Crypt::decrypt($request->id)
-            ])->latest()->get()
+            'data' => Soal::select('soal.id', 'soal.soal', 'soal.a', 'soal.b', 'soal.c', 'soal.d', 'soal.e', 'soal.jawaban', 'soal.pembahasan', 'soal_ujian.soal_id')
+                ->join('bank_soal_pilihan', 'soal.bank_soal_pilihan_id', '=', 'bank_soal_pilihan.id')
+                ->leftJoin('soal_ujian', 'soal.id', '=', 'soal_ujian.soal_id')
+                ->where('soal.bank_soal_pilihan_id', Crypt::decrypt($request->id))
+                ->orderBy('soal.created_at', 'desc')
+                ->get()
         );
+        // return response($data);
         return view('admin.soal_ujian.view_soal', $data);
     }
 
@@ -64,12 +68,13 @@ class SoalUjianController extends Controller
         }
 
         $data = array(
+            'uniq' => $request->ujian_id . "9999" . $request->soal_id,
             'ujian_id' => $request->ujian_id,
             'soal_id' => $request->soal_id,
             'created_at' => Carbon::now('Asia/Jakarta'),
         );
 
-        SoalUjian::insert($data);
+        SoalUjian::insertOrIgnore($data);
 
         return response([
             'success' => true,
@@ -117,8 +122,15 @@ class SoalUjianController extends Controller
      * @param  \App\Models\Soal_ujian  $soal_ujian
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Soal_ujian $soal_ujian)
+    public function destroy(Request $request)
     {
-        //
+        SoalUjian::where([
+            'ujian_id' => $request->ujian_id,
+            'soal_id' => $request->soal_id,
+        ])->delete();
+        return response([
+            'success' => true,
+            'message' => 'success'
+        ]);
     }
 }

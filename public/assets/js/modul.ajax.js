@@ -219,3 +219,18 @@ export function AjaxProsessData(link, data, callback) {
         }
     });
 }
+export function AjaxProsessDataPost(link, data, callback) {
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: link,
+        type: 'POST',
+        data: data,
+        success: function (data) {
+            if (callback && typeof(callback) === "function") {
+                callback(data);
+            }
+        }
+    });
+}

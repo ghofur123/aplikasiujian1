@@ -1,6 +1,6 @@
 <div class="row" style="padding:10px;">
     <span class="card-title">{{ $title }}</span>
-    <input type="text" name="ujian_id_input" id="" value="{{$ujian_id}}">
+    <input type="hidden" name="ujian_id_input" id="" value="{{$ujian_id}}">
     <ul class="collapsible">
         @php
         $no=1;

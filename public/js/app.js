@@ -5510,34 +5510,6 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '.collapsibl
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
   });
 });
-jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('change', 'input[name="id-soal"]', function () {
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').show();
-  var soalId = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).val();
-  var ujianId = jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name="ujian_id_input"]').val();
-  var method = "";
-  var linkPost = "";
-  var dataArray = {
-    'ujian_id': ujianId,
-    'soal_id': soalId
-  };
-  if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).is(':checked')) {
-    console.log('Checkbox is checked');
-    method = "POST";
-    linkPost = "insert";
-  } else {
-    console.log('Checkbox is unchecked');
-  }
-  jquery__WEBPACK_IMPORTED_MODULE_0___default().ajax({
-    type: method,
-    url: linkPost,
-    data: dataArray,
-    beforeSend: function beforeSend() {},
-    success: function success(data) {}
-  }).done(function () {
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
-  });
-  return false;
-});
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('change', 'select[name="pilih-role"]', function () {
   var valueData = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).val();
   console.log(valueData);
@@ -5805,6 +5777,37 @@ function insertDataAll() {
       (0,_modul_event__WEBPACK_IMPORTED_MODULE_2__.eventToast)(dataMessage);
     }
   });
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('change', 'input[name="id-soal"]', function () {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').show();
+    var soalId = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).val();
+    var ujianId = jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name="ujian_id_input"]').val();
+    var method = "";
+    var linkPost = "";
+    var dataArray = {
+      'ujian_id': ujianId,
+      'soal_id': soalId
+    };
+    if (jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).is(':checked')) {
+      method = "POST";
+      linkPost = "pilih-soal";
+    } else {
+      method = "DELETE";
+      linkPost = "pilih-soal";
+    }
+    jquery__WEBPACK_IMPORTED_MODULE_0___default().ajax({
+      headers: {
+        'X-CSRF-TOKEN': jquery__WEBPACK_IMPORTED_MODULE_0___default()('meta[name="csrf-token"]').attr('content')
+      },
+      type: method,
+      url: linkPost,
+      data: dataArray,
+      beforeSend: function beforeSend() {},
+      success: function success(data) {}
+    }).done(function () {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
+    });
+    return false;
+  });
 }
 
 /***/ }),
@@ -5848,6 +5851,7 @@ function loginForm() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "AjaxProsessData": () => (/* binding */ AjaxProsessData),
+/* harmony export */   "AjaxProsessDataPost": () => (/* binding */ AjaxProsessDataPost),
 /* harmony export */   "ajaxProsesTextByData": () => (/* binding */ ajaxProsesTextByData),
 /* harmony export */   "buttonDelete": () => (/* binding */ buttonDelete),
 /* harmony export */   "buttonDeleteLoad": () => (/* binding */ buttonDeleteLoad),
@@ -6071,6 +6075,21 @@ function AjaxProsessData(link, data, callback) {
     }
   });
 }
+function AjaxProsessDataPost(link, data, callback) {
+  jquery__WEBPACK_IMPORTED_MODULE_0___default().ajax({
+    headers: {
+      'X-CSRF-TOKEN': jquery__WEBPACK_IMPORTED_MODULE_0___default()('meta[name="csrf-token"]').attr('content')
+    },
+    url: link,
+    type: 'POST',
+    data: data,
+    success: function success(data) {
+      if (callback && typeof callback === "function") {
+        callback(data);
+      }
+    }
+  });
+}
 
 /***/ }),
 
@@ -6090,15 +6109,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "autoCompleteLembagaForm": () => (/* binding */ autoCompleteLembagaForm),
 /* harmony export */   "clickCollectionOptionJur": () => (/* binding */ clickCollectionOptionJur),
 /* harmony export */   "clickCollectionOptionMapel": () => (/* binding */ clickCollectionOptionMapel),
+/* harmony export */   "closeFullscreen": () => (/* binding */ closeFullscreen),
 /* harmony export */   "eventCkEditor": () => (/* binding */ eventCkEditor),
 /* harmony export */   "eventClearCkEditor": () => (/* binding */ eventClearCkEditor),
 /* harmony export */   "eventClearFormInput": () => (/* binding */ eventClearFormInput),
 /* harmony export */   "eventCollapsible": () => (/* binding */ eventCollapsible),
 /* harmony export */   "eventDropdown": () => (/* binding */ eventDropdown),
+/* harmony export */   "eventKeyboard": () => (/* binding */ eventKeyboard),
 /* harmony export */   "eventModal": () => (/* binding */ eventModal),
 /* harmony export */   "eventSelect": () => (/* binding */ eventSelect),
 /* harmony export */   "eventSideNav": () => (/* binding */ eventSideNav),
-/* harmony export */   "eventToast": () => (/* binding */ eventToast)
+/* harmony export */   "eventToast": () => (/* binding */ eventToast),
+/* harmony export */   "openFullscreen": () => (/* binding */ openFullscreen)
 /* harmony export */ });
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
@@ -6190,6 +6212,41 @@ function actionHide(data) {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()(data[i]).hide();
   }
 }
+function openFullscreen() {
+  console.log('ok');
+  var elem = document.documentElement;
+  if (elem.requestFullscreen) {
+    elem.requestFullscreen();
+  } else if (elem.webkitRequestFullscreen) {
+    /* Safari */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) {
+    /* IE11 */
+    elem.msRequestFullscreen();
+  }
+}
+function closeFullscreen() {
+  if (document.exitFullscreen) {
+    document.exitFullscreen();
+  } else if (document.webkitExitFullscreen) {
+    /* Safari */
+    document.webkitExitFullscreen();
+  } else if (document.msExitFullscreen) {
+    /* IE11 */
+    document.msExitFullscreen();
+  }
+}
+function eventKeyboard() {
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      var isInFullScreen = document.fullscreenElement && document.fullscreenElement !== null || document.webkitFullscreenElement && document.webkitFullscreenElement !== null || document.msFullscreenElement && document.msFullscreenElement !== null;
+      if (!isInFullScreen) {
+        openFullscreen();
+      }
+    }
+  });
+}
 
 /***/ }),
 
@@ -6207,9 +6264,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _modul_ajax__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modul.ajax */ "./public/assets/js/modul.ajax.js");
+/* harmony import */ var _modul_event__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modul.event */ "./public/assets/js/modul.event.js");
+
+
 
 
 function prosesComplex() {
+  // create users
+  // insert data siswa ke users
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '#create-users-siswa', function () {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').show();
     var valueKelasId = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data');
@@ -6224,7 +6286,49 @@ function prosesComplex() {
       });
     } else {
       alert('Pilih Kelas Lebih Dulu');
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
     }
+  });
+  // kartu siswa
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '#kartu-siswa-class', function () {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').show();
+    var valueKelasId = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data');
+    if (valueKelasId.length > 0) {
+      window.open('kartu-siswa/kartu/' + valueKelasId, '_blank');
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
+    } else {
+      alert('Pilih Kelas Lebih Dulu');
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
+    }
+  });
+  // mulai ujian
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '.mulai-ujian-class', function () {
+    var idUjian = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data');
+    if (confirm('Akan memulai ujian...?')) {
+      // openFullscreen();
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').show();
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()('.content-load-class').load('ujian-siswa/mulai', function () {
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()('.number-load-class').load('ujian-siswa/number/' + idUjian, function () {
+          jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
+        });
+      });
+    }
+  });
+  // simpan dan update jawaban
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', 'input[name="pilihan-radio"]', function () {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').show();
+    var ujianId = jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name="ujian_id_form"]').val();
+    var dataSet = {
+      'ujian_id': ujianId,
+      'soal_id': jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name="id_soal"]').val(),
+      'jawaban': jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).val()
+    };
+    // console.log(data);
+    (0,_modul_ajax__WEBPACK_IMPORTED_MODULE_1__.AjaxProsessDataPost)('jawaban-pilihan-save', dataSet, function (data) {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()('.number-load-class').load('ujian-siswa/number/' + ujianId, function () {
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
+      });
+    });
   });
 }
 
@@ -6438,7 +6542,15 @@ function viewAll() {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').show();
     var valueKelasId = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).val();
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('#create-users-siswa').attr('data', valueKelasId);
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('#kartu-siswa-class').attr('data', valueKelasId);
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('.table-view-data').load('siswa/view/' + valueKelasId, function () {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
+    });
+  });
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '.number-exam-class', function () {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').show();
+    var idSoal = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data');
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('.view-soal-class').load('ujian-siswa/' + idSoal, function () {
       jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
     });
   });

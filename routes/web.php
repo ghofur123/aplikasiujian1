@@ -21,6 +21,9 @@ use App\Http\Controllers\Admin\SoalController;
 use App\Http\Controllers\Admin\SoalImportController;
 use App\Http\Controllers\Admin\SoalUjianController;
 use App\Http\Controllers\Admin\UsersController;
+use App\Http\Controllers\Admin\siswaKartuController;
+use App\Http\Controllers\Siswa\UjianSiswaController;
+use App\Http\Controllers\Siswa\JawabanPilihanController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -37,116 +40,163 @@ use Illuminate\Support\Facades\Auth;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::middleware(['web', 'auth:sanctum'])->group(function () {
-});
+// Route::middleware(['web', 'auth:sanctum'])->group(function () {
+// });
 
-
+Auth::routes();
 // Route::get('/login', [LoginController::class, 'index']);
 // Route::post('/login', [LoginController::class, 'login']);
 // 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 // 
-Route::get('/lembaga', [LembagaController::class, 'index']);
-Route::get('/lembaga/{id}', [LembagaController::class, 'show']);
-Route::post('/lembaga', [LembagaController::class, 'store']);
-Route::put('/lembaga', [LembagaController::class, 'update']);
-Route::delete('/lembaga', [LembagaController::class, 'destroy']);
+Route::prefix('lembaga')->group(function () {
+    Route::get('/', [LembagaController::class, 'index']);
+    Route::get('/{id}', [LembagaController::class, 'show']);
+    Route::post('/', [LembagaController::class, 'store']);
+    Route::put('/', [LembagaController::class, 'update']);
+    Route::delete('/', [LembagaController::class, 'destroy']);
+});
 // 
-Route::get('/guru', [GuruController::class, 'index']);
-Route::get('/guru/{id}', [GuruController::class, 'show']);
-Route::post('/guru', [GuruController::class, 'store']);
-Route::put('/guru', [GuruController::class, 'update']);
-Route::delete('/guru', [GuruController::class, 'destroy']);
-Route::get('/guru/form/store', [GuruController::class, 'create']);
+Route::prefix('guru')->group(function () {
+    Route::get('/', [GuruController::class, 'index']);
+    Route::get('/{id}', [GuruController::class, 'show']);
+    Route::post('/', [GuruController::class, 'store']);
+    Route::put('/', [GuruController::class, 'update']);
+    Route::delete('/', [GuruController::class, 'destroy']);
+    Route::get('/form/store', [GuruController::class, 'create']);
+});
 // 
 Route::post('/guru-import-excel', [GuruImportController::class, 'index']);
 // 
-Route::get('/jurusan', [JurusanController::class, 'index']);
-Route::post('/jurusan', [JurusanController::class, 'store']);
-Route::get('/jurusan/{id}', [JurusanController::class, 'show']);
-Route::put('/jurusan', [JurusanController::class, 'update']);
-Route::delete('/jurusan', [JurusanController::class, 'destroy']);
-Route::get('/jurusan/form/store', [JurusanController::class, 'create']);
+Route::prefix('jurusan')->group(function () {
+    Route::get('/', [JurusanController::class, 'index']);
+    Route::post('/', [JurusanController::class, 'store']);
+    Route::get('/{id}', [JurusanController::class, 'show']);
+    Route::put('/', [JurusanController::class, 'update']);
+    Route::delete('/', [JurusanController::class, 'destroy']);
+    Route::get('/form/store', [JurusanController::class, 'create']);
+});
 // 
-Route::get('/kelas', [KelasController::class, 'index']);
-Route::post('/kelas', [KelasController::class, 'store']);
-Route::get('/kelas/{id}', [KelasController::class, 'show']);
-Route::put('/kelas', [KelasController::class, 'update']);
-Route::delete('/kelas', [KelasController::class, 'destroy']);
-Route::get('/kelas/form/store', [KelasController::class, 'create']);
+Route::prefix('kelas')->group(function () {
+    Route::get('/', [KelasController::class, 'index']);
+    Route::post('/', [KelasController::class, 'store']);
+    Route::get('/{id}', [KelasController::class, 'show']);
+    Route::put('/{id}', [KelasController::class, 'update']);
+    Route::delete('/{id}', [KelasController::class, 'destroy']);
+    Route::get('/form/store', [KelasController::class, 'create']);
+});
 // 
-Route::get('/tingkat', [TingkatController::class, 'index']);
-Route::post('/tingkat', [TingkatController::class, 'store']);
-Route::get('/tingkat/{id}', [TingkatController::class, 'show']);
-Route::put('/tingkat', [TingkatController::class, 'update']);
-Route::delete('/tingkat', [TingkatController::class, 'destroy']);
-Route::get('/tingkat/form/store', [TingkatController::class, 'create']);
-// 
-Route::get('/mapel', [MapelController::class, 'index']);
-Route::post('/mapel', [MapelController::class, 'store']);
-Route::get('/mapel/{id}', [MapelController::class, 'show']);
-Route::put('/mapel', [MapelController::class, 'update']);
-Route::delete('/mapel', [MapelController::class, 'destroy']);
-Route::get('/mapel/form/store', [MapelController::class, 'create']);
-// 
-Route::get('/siswa', [SiswaController::class, 'index']);
-Route::post('/siswa', [SiswaController::class, 'store']);
-Route::get('/siswa/{id}', [SiswaController::class, 'show']);
-Route::put('/siswa', [SiswaController::class, 'update']);
-Route::delete('/siswa', [SiswaController::class, 'destroy']);
-Route::get('/siswa/form/store', [SiswaController::class, 'create']);
+Route::prefix('tingkat')->group(function () {
+    Route::get('/', [TingkatController::class, 'index']);
+    Route::post('/', [TingkatController::class, 'store']);
+    Route::get('/{id}', [TingkatController::class, 'show']);
+    Route::put('/', [TingkatController::class, 'update']);
+    Route::delete('/', [TingkatController::class, 'destroy']);
+    Route::get('/form/store', [TingkatController::class, 'create']);
+});
 
-Route::get('/siswa/view/{id}', [SiswaController::class, 'view']);
+// 
+Route::prefix('mapel')->group(function () {
+    Route::get('/', [MapelController::class, 'index']);
+    Route::post('/', [MapelController::class, 'store']);
+    Route::get('/{id}', [MapelController::class, 'show']);
+    Route::put('/', [MapelController::class, 'update']);
+    Route::delete('/', [MapelController::class, 'destroy']);
+    Route::get('/form/store', [MapelController::class, 'create']);
+});
+// 
+Route::prefix('siswa')->group(function () {
+    Route::get('/', [SiswaController::class, 'index']);
+    Route::post('/', [SiswaController::class, 'store']);
+    Route::get('/{id}', [SiswaController::class, 'show']);
+    Route::put('/', [SiswaController::class, 'update']);
+    Route::delete('/', [SiswaController::class, 'destroy']);
+    Route::get('/form/store', [SiswaController::class, 'create']);
+    Route::get('/view/{id}', [SiswaController::class, 'view']);
+});
+Route::get('/kartu-siswa/kartu/{id}', [siswaKartuController::class, 'index']);
 // 
 
 Route::post('/siswa-import-excel', [SiswaImportController::class, 'siswaImport']);
 // 
-Route::get('/ujian', [UjianController::class, 'index']);
-Route::post('/ujian', [UjianController::class, 'store']);
-Route::get('/ujian/{id}', [UjianController::class, 'show']);
-Route::put('/ujian', [UjianController::class, 'update']);
-Route::delete('/ujian', [UjianController::class, 'destroy']);
-Route::get('/ujian/form/store', [UjianController::class, 'create']);
+Route::prefix('ujian')->group(function () {
+    Route::get('/', [UjianController::class, 'index']);
+    Route::post('/', [UjianController::class, 'store']);
+    Route::get('/{id}', [UjianController::class, 'show']);
+    Route::put('/', [UjianController::class, 'update']);
+    Route::delete('/', [UjianController::class, 'destroy']);
+    Route::get('/form/store', [UjianController::class, 'create']);
+});
 // proses lanjut dari ujian
-Route::get('/pilih-soal/{id}', [SoalUjianController::class, 'index']);
+Route::prefix('pilih-soal')->group(function () {
+    Route::get('/{id}', [SoalUjianController::class, 'index']);
+    Route::post('/', [SoalUjianController::class, 'store']);
+    Route::delete('/', [SoalUjianController::class, 'destroy']);
+});
 Route::get('/view-soal-in-ujian/{id}', [SoalUjianController::class, 'create']);
 
 // 
-Route::get('/bank-soal-pilihan', [BankSoalPilihanController::class, 'index']);
-Route::post('/bank-soal-pilihan', [BankSoalPilihanController::class, 'store']);
-Route::get('/bank-soal-pilihan/{id}', [BankSoalPilihanController::class, 'show']);
-Route::put('/bank-soal-pilihan', [BankSoalPilihanController::class, 'update']);
-Route::delete('/bank-soal-pilihan', [BankSoalPilihanController::class, 'destroy']);
-Route::get('/bank-soal-pilihan/form/store', [BankSoalPilihanController::class, 'create']);
+Route::prefix('bank-soal-pilihan')->group(function () {
+    Route::get('/', [BankSoalPilihanController::class, 'index']);
+    Route::post('/', [BankSoalPilihanController::class, 'store']);
+    Route::get('/{id}', [BankSoalPilihanController::class, 'show']);
+    Route::put('/', [BankSoalPilihanController::class, 'update']);
+    Route::delete('/', [BankSoalPilihanController::class, 'destroy']);
+    Route::get('/form/store', [BankSoalPilihanController::class, 'create']);
+});
 // 
-Route::get('/soal/index/{id}', [SoalController::class, 'index']);
-Route::post('/soal', [SoalController::class, 'store']);
-Route::get('/soal/{id}', [SoalController::class, 'show']);
-Route::put('/soal', [SoalController::class, 'update']);
-Route::delete('/soal', [SoalController::class, 'destroy']);
-Route::get('/soal/form/store/{bank_soal_pilihan_id}', [SoalController::class, 'create']);
+Route::prefix('soal')->group(function () {
+    Route::get('/index/{id}', [SoalController::class, 'index']);
+    Route::post('/', [SoalController::class, 'store']);
+    Route::get('/{id}', [SoalController::class, 'show']);
+    Route::put('/', [SoalController::class, 'update']);
+    Route::delete('/', [SoalController::class, 'destroy']);
+    Route::get('/form/store/{bank_soal_pilihan_id}', [SoalController::class, 'create']);
+});
 // 
-Route::get('/soal-import/form', [SoalImportController::class, 'soalImportForm']);
-Route::post('/soal-import/import/excel', [SoalImportController::class, 'soalImport']);
+Route::prefix('soal-import')->group(function () {
+    Route::get('/form', [SoalImportController::class, 'soalImportForm']);
+    Route::post('/import/excel', [SoalImportController::class, 'soalImport']);
+});
 // 
-Route::get('/users', [UsersController::class, 'index']);
-Route::get('/users/get/{kelas_id}', [UsersController::class, 'store']);
-Route::get('/users/pdf/{kelas_id}', [UsersController::class, 'create']);
+Route::prefix('users')->group(function () {
+    Route::get('/', [UsersController::class, 'index']);
+    Route::get('/get/{kelas_id}', [UsersController::class, 'store']);
+    Route::get('/pdf/{kelas_id}', [UsersController::class, 'create']);
+});
 // 
 Route::get('/download-file/{name}', [DownloadController::class, 'download']);
 // 
-Route::get('/component/form/ref/jurusan', [ComponentController::class, 'componentFormJurusan']);
-Route::get('/component/form/ref/lembaga', [ComponentController::class, 'componentFormLembaga']);
-Route::get('/component/form/ref/mapel', [ComponentController::class, 'componentFormMapel']);
+Route::prefix('component')->group(function () {
+    Route::prefix('form/ref')->group(function () {
+        Route::get('/jurusan', [ComponentController::class, 'componentFormJurusan']);
+        Route::get('/lembaga', [ComponentController::class, 'componentFormLembaga']);
+        Route::get('/mapel', [ComponentController::class, 'componentFormMapel']);
+    });
 
-Route::get('/component/lembaga/{search}', [ComponentController::class, 'lembaga']);
-Route::get('/component/jurusan/{search}', [ComponentController::class, 'refJurusan']);
-Route::get('/component/mapel/{search}', [ComponentController::class, 'refMataPelajaran']);
+    Route::get('/lembaga/{search}', [ComponentController::class, 'lembaga']);
+    Route::get('/jurusan/{search}', [ComponentController::class, 'refJurusan']);
+    Route::get('/mapel/{search}', [ComponentController::class, 'refMataPelajaran']);
+});
 // 
 Route::get('/lembaga-form', [StoreFormController::class, 'lembaga']);
 Route::get('/guru-form-excel', [StoreFormController::class, 'guruExcel']);
 Route::get('/siswa-form-excel', [StoreFormController::class, 'siswaExcel']);
-
-Auth::routes();
-
+// 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// siswa
+
+// 
+Route::prefix('ujian-siswa')->group(function () {
+    Route::get('/', [UjianSiswaController::class, 'index']);
+    Route::get('/mulai', [UjianSiswaController::class, 'create']);
+    Route::get('/number/{id}', [UjianSiswaController::class, 'number']);
+    Route::get('/{id}', [UjianSiswaController::class, 'show']);
+});
+
+// 
+Route::prefix('jawaban-pilihan-save')->group(function () {
+    Route::get('/', [JawabanPilihanController::class, 'index']);
+    Route::post('/', [JawabanPilihanController::class, 'store']);
+});

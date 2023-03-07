@@ -22,7 +22,7 @@
             <td>
                 <p>
                     <label>
-                        <input type="checkbox" name="id-soal" value="{{$item->id}}" />
+                        <input type="checkbox" name="id-soal" value="{{$item->id}}" {{ $item->id == $item->soal_id ? 'checked' : '' }} />
                         <span>{{ $no++ }}</span>
                     </label>
                 </p>

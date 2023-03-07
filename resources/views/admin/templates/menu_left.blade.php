@@ -1,5 +1,7 @@
 <nav class="blue-grey">
-    <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+    <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large">
+        <i class="material-icons">menu</i>
+    </a>
 </nav>
 <ul id="slide-out" class="sidenav">
     <li class="menu-item" link="lembaga">
@@ -60,6 +62,12 @@
     <li>
         <div class="divider"></div>
     </li>
+    <li><a class="subheader">Siswa</a></li>
+    <li class="menu-item" link="ujian-siswa">
+        <a href="#">
+            <i class="material-icons">alarm</i>Ujian
+        </a>
+    </li>
     <li><a class="subheader">Subheader</a></li>
     <li class="menu-item" link="setting">
         <a href="#">
@@ -68,7 +76,7 @@
     </li>
     <li class="menu-item" link="logout">
         <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="material-icons">build</i>Log out
+            <i class="material-icons">close</i>Log out
         </a>
     </li>
 

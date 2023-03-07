@@ -30,7 +30,7 @@ class SoalImport implements ToModel, WithStartRow
             'e' => $row[6],
             'jawaban' => strtolower($row[7]),
             'pembahasan' => $row[8],
-            'bank_soal_pilihan_id' => $row[9],
+            'bank_soal_pilihan_id' => session('bank_soal_pilihan_id'),
         ]);
     }
 }

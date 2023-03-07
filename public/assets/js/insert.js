@@ -159,4 +159,35 @@ export function insertDataAll() {
             eventToast(dataMessage);
         }
     });
+    $(document).on('change', 'input[name="id-soal"]', function () {
+        $('.progress').show();
+        let soalId = $(this).val();
+        let ujianId = $('input[name="ujian_id_input"]').val();
+        let method = "";
+        let linkPost = "";
+        let dataArray = {
+            'ujian_id': ujianId,
+            'soal_id': soalId
+        };
+        if ($(this).is(':checked')) {
+            method = "POST";
+            linkPost = "pilih-soal";
+        } else {
+            method = "DELETE";
+            linkPost = "pilih-soal";
+        }
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: method,
+            url: linkPost,
+            data: dataArray,
+            beforeSend: function () {},
+            success: function (data) {}
+        }).done(function () {
+            $('.progress').hide();
+        });
+        return false;
+    });
 }

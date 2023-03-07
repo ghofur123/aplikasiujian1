@@ -77,7 +77,6 @@ export function clickCollectionOptionMapel() {
         $('.autocomplete-collection-mapel').hide();
     });
 }
-
 export function actionShow(data) {
     for (let i = 0; i < data.length; i++) {
         $(data[i]).show();
@@ -87,4 +86,37 @@ export function actionHide(data) {
     for (let i = 0; i < data.length; i++) {
         $(data[i]).hide();
     }
+}
+export function openFullscreen() {
+    console.log('ok');
+    var elem = document.documentElement;
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen) { /* Safari */
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen) { /* IE11 */
+        elem.msRequestFullscreen();
+    }
+}
+
+export function closeFullscreen() {
+    if (document.exitFullscreen) {
+        document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) { /* Safari */
+        document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { /* IE11 */
+        document.msExitFullscreen();
+    }
+}
+export function eventKeyboard() {
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            e.preventDefault();
+            var isInFullScreen = (document.fullscreenElement && document.fullscreenElement !== null) || (document.webkitFullscreenElement && document.webkitFullscreenElement !== null) || (document.msFullscreenElement && document.msFullscreenElement !== null);
+
+            if (! isInFullScreen) {
+                openFullscreen();
+            }
+        }
+    });
 }
