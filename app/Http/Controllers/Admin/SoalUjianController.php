@@ -23,7 +23,14 @@ class SoalUjianController extends Controller
         $data = array(
             'title' => 'Soal Ujian',
             'ujian_id' => $request->id,
-            'BankSoalPilihan' => BankSoalPilihan::with('mapel')->latest()->get()
+            'BankSoalPilihan' => BankSoalPilihan::select('bank_soal_pilihan.id', 'bank_soal_pilihan.nama', 'mapel.nama AS mapel', 'kelas.nama_kelas', 'lembaga.nama_lembaga')
+                ->join('mapel', 'bank_soal_pilihan.mapel_id', '=', 'mapel.id')
+                ->join('kelas', 'mapel.kelas_id', '=', 'kelas.id')
+                ->join('jurusan', 'kelas.jurusan_id', '=', 'jurusan.id')
+                ->join('lembaga', 'jurusan.lembaga_id', '=', 'lembaga.id')
+                // ->where('bank_soal_pilihan.nama', 'like', '%sdss%')
+                ->orderBy('bank_soal_pilihan.id', 'DESC')
+                ->get()
         );
         return view('admin.soal_ujian.table', $data);
     }
@@ -35,12 +42,15 @@ class SoalUjianController extends Controller
      */
     public function create(Request $request)
     {
+        $ujian_id = Crypt::decrypt($request->ujian_id);
         $data = array(
             'data' => Soal::select('soal.id', 'soal.soal', 'soal.a', 'soal.b', 'soal.c', 'soal.d', 'soal.e', 'soal.jawaban', 'soal.pembahasan', 'soal_ujian.soal_id')
                 ->join('bank_soal_pilihan', 'soal.bank_soal_pilihan_id', '=', 'bank_soal_pilihan.id')
-                ->leftJoin('soal_ujian', 'soal.id', '=', 'soal_ujian.soal_id')
-                ->where('soal.bank_soal_pilihan_id', Crypt::decrypt($request->id))
-                ->orderBy('soal.created_at', 'desc')
+                ->leftJoin('soal_ujian', function ($join) use ($ujian_id) {
+                    $join->on('soal.id', '=', 'soal_ujian.soal_id')
+                        ->where('soal_ujian.ujian_id', '=', $ujian_id);
+                })
+                ->where('soal.bank_soal_pilihan_id', '=', Crypt::decrypt($request->id))
                 ->get()
         );
         // return response($data);
@@ -68,14 +78,12 @@ class SoalUjianController extends Controller
         }
 
         $data = array(
-            'uniq' => $request->ujian_id . "9999" . $request->soal_id,
-            'ujian_id' => $request->ujian_id,
+            'uniq' => Crypt::decrypt($request->ujian_id) . "9999" . $request->soal_id,
+            'ujian_id' => Crypt::decrypt($request->ujian_id),
             'soal_id' => $request->soal_id,
             'created_at' => Carbon::now('Asia/Jakarta'),
         );
-
         SoalUjian::insertOrIgnore($data);
-
         return response([
             'success' => true,
             'message' => 'success',
@@ -125,7 +133,7 @@ class SoalUjianController extends Controller
     public function destroy(Request $request)
     {
         SoalUjian::where([
-            'ujian_id' => $request->ujian_id,
+            'ujian_id' => Crypt::decrypt($request->ujian_id),
             'soal_id' => $request->soal_id,
         ])->delete();
         return response([

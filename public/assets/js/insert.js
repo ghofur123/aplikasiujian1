@@ -1,5 +1,5 @@
 import $, {data} from 'jquery';
-import {submitFormText, submitFormCkEditor} from './modul.ajax';
+import {submitFormText, submitFormCkEditor, AjaxProsessData} from './modul.ajax';
 import {eventToast, eventClearFormInput, eventClearCkEditor} from './modul.event';
 
 
@@ -176,6 +176,7 @@ export function insertDataAll() {
             method = "DELETE";
             linkPost = "pilih-soal";
         }
+        console.log(method);
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -190,4 +191,18 @@ export function insertDataAll() {
         });
         return false;
     });
+
+    $(document).on('click', '#create-users-guru', function () {
+
+        let valueData = '1';
+        AjaxProsessData('guru/create-users', valueData, function (data) {
+            $('.progress').hide();
+            if (data.success == true) {
+                alert('User Berhasil di Buat');
+            } else {
+                alert('User Gagal di Buat');
+            }
+        });
+    });
+
 }

@@ -9,6 +9,14 @@
     <link rel="stylesheet" href="public/css/app.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="{{ asset('vendor/ckeditor/ckeditor/ckeditor.js') }}"></script>
+    <style>
+        .tampil-nilai-class {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
     <title>ujian</title>
 </head>
 

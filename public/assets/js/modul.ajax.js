@@ -234,3 +234,18 @@ export function AjaxProsessDataPost(link, data, callback) {
         }
     });
 }
+export function AjaxProsessDataPut(link, dataValue, callback) {
+    $.ajax({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        url: link,
+        type: 'PUT',
+        data: dataValue,
+        success: function (data) {
+            if (callback && typeof(callback) === "function") {
+                callback(data);
+            }
+        }
+    });
+}

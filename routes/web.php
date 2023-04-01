@@ -24,6 +24,9 @@ use App\Http\Controllers\Admin\UsersController;
 use App\Http\Controllers\Admin\siswaKartuController;
 use App\Http\Controllers\Siswa\UjianSiswaController;
 use App\Http\Controllers\Siswa\JawabanPilihanController;
+use App\Http\Controllers\Siswa\StatusUjianSiswaController;
+use App\Http\Controllers\Siswa\NilaiSiswaController;
+use App\Http\Controllers\Admin\GuruUsersController;
 use Illuminate\Support\Facades\Auth;
 
 /*
@@ -64,6 +67,10 @@ Route::prefix('guru')->group(function () {
     Route::put('/', [GuruController::class, 'update']);
     Route::delete('/', [GuruController::class, 'destroy']);
     Route::get('/form/store', [GuruController::class, 'create']);
+
+
+    // guru create users
+    Route::get('/create-users/{id}', [GuruUsersController::class, 'create']);
 });
 // 
 Route::post('/guru-import-excel', [GuruImportController::class, 'index']);
@@ -126,6 +133,7 @@ Route::prefix('ujian')->group(function () {
     Route::put('/', [UjianController::class, 'update']);
     Route::delete('/', [UjianController::class, 'destroy']);
     Route::get('/form/store', [UjianController::class, 'create']);
+    Route::put('/update/status', [UjianController::class, 'updateStatus']);
 });
 // proses lanjut dari ujian
 Route::prefix('pilih-soal')->group(function () {
@@ -133,7 +141,7 @@ Route::prefix('pilih-soal')->group(function () {
     Route::post('/', [SoalUjianController::class, 'store']);
     Route::delete('/', [SoalUjianController::class, 'destroy']);
 });
-Route::get('/view-soal-in-ujian/{id}', [SoalUjianController::class, 'create']);
+Route::get('/view-soal-in-ujian/{id}/{ujian_id}', [SoalUjianController::class, 'create']);
 
 // 
 Route::prefix('bank-soal-pilihan')->group(function () {
@@ -199,4 +207,12 @@ Route::prefix('ujian-siswa')->group(function () {
 Route::prefix('jawaban-pilihan-save')->group(function () {
     Route::get('/', [JawabanPilihanController::class, 'index']);
     Route::post('/', [JawabanPilihanController::class, 'store']);
+});
+
+Route::prefix('status-ujian-siswa')->group(function () {
+    Route::post('/', [StatusUjianSiswaController::class, 'store']);
+});
+
+Route::prefix('nilai-siswa')->group(function () {
+    Route::get('/', [NilaiSiswaController::class, 'index']);
 });

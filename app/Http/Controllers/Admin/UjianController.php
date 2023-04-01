@@ -10,6 +10,7 @@ use App\Models\Ujian;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\DB;
 
 class UjianController extends Controller
 {
@@ -22,9 +23,11 @@ class UjianController extends Controller
     {
         $data = array(
             'title' => 'Ujian',
-            'data' => Ujian::with('kelas')
-                ->with('mapel')
-                ->latest()
+            'data' => Ujian::select('ujian.id', 'ujian.nama_ujian', 'ujian.jumlah_soal', 'ujian.waktu', 'ujian.status', 'ujian.metode', 'kelas.nama_kelas', 'mapel.nama AS nama_mapel', DB::raw('COUNT(ujian.id) AS jumlah_soal_pilih'))
+                ->join('kelas', 'ujian.kelas_id', '=', 'kelas.id')
+                ->join('mapel', 'ujian.mapel_id', '=', 'mapel.id')
+                ->leftJoin('soal_ujian', 'soal_ujian.ujian_id', '=', 'ujian.id')
+                ->groupBy('ujian.id', 'ujian.nama_ujian', 'ujian.jumlah_soal', 'ujian.waktu', 'ujian.status', 'ujian.metode', 'kelas.nama_kelas', 'mapel.nama')
                 ->get()
         );
         return view('admin.ujian.table', $data);
@@ -35,6 +38,9 @@ class UjianController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function checkStatus()
+    {
+    }
     public function create()
     {
         $data = array(
@@ -154,7 +160,29 @@ class UjianController extends Controller
             'message' => 'success'
         ]);
     }
-
+    public function updateStatus(Request $request)
+    {
+        $validation = Validator($request->all(), [
+            'id' => 'required',
+            'status' => 'required',
+        ]);
+        if ($validation->fails()) {
+            return response([
+                'success' => false,
+                'message' => $validation->errors()
+            ]);
+        }
+        Ujian::where([
+            'id' => Crypt::decrypt($request->id)
+        ])->update([
+            'status' => $request->status,
+            'updated_at' => Carbon::now('Asia/Jakarta'),
+        ]);
+        return response([
+            'success' => true,
+            'message' => 'success'
+        ]);
+    }
     /**
      * Remove the specified resource from storage.
      *

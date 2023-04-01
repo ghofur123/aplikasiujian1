@@ -34,11 +34,7 @@
         <label class="active" for="mapel_id-form">Mapel ID</label>
     </div>
     <div class="input-field col s6">
-        <select name="status" id="status-form" class="browser-default">
-            <option value="" disabled selected>Pilih Status</option>
-            <option value="aktif" {{ $ujian->status == 'aktif' ? 'selected' : '' }}>Aktif</option>
-            <option value="tidak aktif" {{ $ujian->status == 'tidak aktif' ? 'selected' : '' }}>Tidak Aktif</option>
-        </select>
+        <input name="status" id="status-form" value="{{$ujian->status}}" readonly>
         <label class="active" for="status-form">Status</label>
     </div>
     <div class="input-field col s6">

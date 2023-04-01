@@ -32,11 +32,7 @@
         <label class="active" for="mapel_id-form">Mapel ID</label>
     </div>
     <div class="input-field col s6">
-        <select name="status" id="status-form" class="browser-default">
-            <option value="" disabled selected>Pilih Status</option>
-            <option value="aktif">Aktif</option>
-            <option value="tidak aktif">Tidak Aktif</option>
-        </select>
+        <input name="status" id="status-form" value="tidak aktif" readonly>
         <label class="active" for="status-form">Status</label>
     </div>
     <div class="input-field col s6">

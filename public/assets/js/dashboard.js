@@ -45,23 +45,33 @@ $(document).on('click', '.menu-item', function () {
         eventModal();
         eventDropdown();
         // mengambil link
+        let resLinkOne = link.split("/")[0];
         let resLink = link.split("/")[0] + "/" + link.split("/")[1];
-        if (resLink == 'soal/index') {
+
+        console.log(resLinkOne);
+
+        if (resLink == 'soal/index' || resLinkOne == 'ujian-siswa') {
             $('.datatables-class').DataTable({scrollX: true});
+        } else if (resLinkOne == 'pilih-soal') {
+            eventCollapsible();
+        } else if (resLinkOne == 'soal') {
+            //
+            // jika ke menu soal maka akan membuka ckeditor dan colapsible
+            let dataCkEditor = [
+                'soal',
+                'a',
+                'b',
+                'c',
+                'd',
+                'e',
+                'pembahasan'
+            ];
+            eventCkEditor(dataCkEditor);
+            eventCollapsible();
         } else {
             $('.datatables-class').DataTable();
         }
-        let dataCkEditor = [
-            'soal',
-            'a',
-            'b',
-            'c',
-            'd',
-            'e',
-            'pembahasan'
-        ];
-        eventCkEditor(dataCkEditor);
-        eventCollapsible();
+
     });
 });
 $(document).on('click', '.btn-modal-class', function () {
@@ -86,15 +96,3 @@ autoComplateRefMapel(function () {});
 loginForm();
 viewAll();
 prosesComplex();
-$(document).on('click', '.collapsible-click-class', function () {
-    $('.progress').show();
-    let bankSoalId = $(this).attr('data');
-    let idDiv = $(this).attr('data1');
-    $('#collapsible-id-' + idDiv).load('view-soal-in-ujian/' + bankSoalId, function () {
-        $('.progress').hide();
-    });
-});
-$(document).on('change', 'select[name="pilih-role"]', function () {
-    let valueData = $(this).val();
-    console.log(valueData);
-});

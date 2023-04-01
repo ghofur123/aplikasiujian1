@@ -1,5 +1,6 @@
 import $, {data} from 'jquery';
-import {submitFormPut, submitFormCkEditor} from './modul.ajax';
+import {submitFormPut, submitFormCkEditor, AjaxProsessDataPut} from './modul.ajax';
+
 import {eventToast, eventClearFormInput} from './modul.event';
 
 export function updateDataAll() {
@@ -148,6 +149,34 @@ export function updateDataAll() {
             eventToast(dataMessage);
         }
     });
+    $(document).on('click', '.btn-aktifkan-class', function () {
+        let ujianId = $(this).attr('data');
+        let status = $(this).attr('data1');
+        let jumlahSoal = $(this).attr('data2');
+        let jumlahSoalPilih = $(this).attr('data3');
 
+        if (jumlahSoal == jumlahSoalPilih) {
+            $('.progress').show();
+            // let statusUpdate = '';
+            if (status == 'aktif') {
+                var statusUpdate = 'tidak aktif';
+            } else {
+                var statusUpdate = 'aktif';
+            }
+            let dataValue = {
+                'id': ujianId,
+                'status': statusUpdate
+            }
+            AjaxProsessDataPut('ujian/update/status', dataValue, function (data) {
+                $('.content-load-class').load('ujian', function () {
+                    $('.progress').hide();
+                });
+            });
+        } else if (jumlahSoal > jumlahSoalPilih) {
+            alert('Soal yang di pilih belum sesuai dengan jumlah soal ' + jumlahSoal + "/" + jumlahSoalPilih);
+        } else if (jumlahSoal < jumlahSoalPilih) {
+            alert('Soal yang di pilih belum sesuai dengan jumlah soal ' + jumlahSoal + "/" + jumlahSoalPilih);
+        }
+    });
 
 }

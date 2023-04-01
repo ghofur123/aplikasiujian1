@@ -5468,17 +5468,24 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '.menu-item'
     (0,_modul_event__WEBPACK_IMPORTED_MODULE_3__.eventModal)();
     (0,_modul_event__WEBPACK_IMPORTED_MODULE_3__.eventDropdown)();
     // mengambil link
+    var resLinkOne = link.split("/")[0];
     var resLink = link.split("/")[0] + "/" + link.split("/")[1];
-    if (resLink == 'soal/index') {
+    console.log(resLinkOne);
+    if (resLink == 'soal/index' || resLinkOne == 'ujian-siswa') {
       jquery__WEBPACK_IMPORTED_MODULE_0___default()('.datatables-class').DataTable({
         scrollX: true
       });
+    } else if (resLinkOne == 'pilih-soal') {
+      (0,_modul_event__WEBPACK_IMPORTED_MODULE_3__.eventCollapsible)();
+    } else if (resLinkOne == 'soal') {
+      //
+      // jika ke menu soal maka akan membuka ckeditor dan colapsible
+      var dataCkEditor = ['soal', 'a', 'b', 'c', 'd', 'e', 'pembahasan'];
+      (0,_modul_event__WEBPACK_IMPORTED_MODULE_3__.eventCkEditor)(dataCkEditor);
+      (0,_modul_event__WEBPACK_IMPORTED_MODULE_3__.eventCollapsible)();
     } else {
       jquery__WEBPACK_IMPORTED_MODULE_0___default()('.datatables-class').DataTable();
     }
-    var dataCkEditor = ['soal', 'a', 'b', 'c', 'd', 'e', 'pembahasan'];
-    (0,_modul_event__WEBPACK_IMPORTED_MODULE_3__.eventCkEditor)(dataCkEditor);
-    (0,_modul_event__WEBPACK_IMPORTED_MODULE_3__.eventCollapsible)();
   });
 });
 jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '.btn-modal-class', function () {
@@ -5502,18 +5509,6 @@ jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '.btn-modal-
 (0,_login__WEBPACK_IMPORTED_MODULE_8__.loginForm)();
 (0,_view_data__WEBPACK_IMPORTED_MODULE_9__.viewAll)();
 (0,_proses_complex__WEBPACK_IMPORTED_MODULE_10__.prosesComplex)();
-jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '.collapsible-click-class', function () {
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').show();
-  var bankSoalId = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data');
-  var idDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data1');
-  jquery__WEBPACK_IMPORTED_MODULE_0___default()('#collapsible-id-' + idDiv).load('view-soal-in-ujian/' + bankSoalId, function () {
-    jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
-  });
-});
-jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('change', 'select[name="pilih-role"]', function () {
-  var valueData = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).val();
-  console.log(valueData);
-});
 
 /***/ }),
 
@@ -5794,6 +5789,7 @@ function insertDataAll() {
       method = "DELETE";
       linkPost = "pilih-soal";
     }
+    console.log(method);
     jquery__WEBPACK_IMPORTED_MODULE_0___default().ajax({
       headers: {
         'X-CSRF-TOKEN': jquery__WEBPACK_IMPORTED_MODULE_0___default()('meta[name="csrf-token"]').attr('content')
@@ -5807,6 +5803,17 @@ function insertDataAll() {
       jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
     });
     return false;
+  });
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '#create-users-guru', function () {
+    var valueData = '1';
+    (0,_modul_ajax__WEBPACK_IMPORTED_MODULE_1__.AjaxProsessData)('guru/create-users', valueData, function (data) {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
+      if (data.success == true) {
+        alert('User Berhasil di Buat');
+      } else {
+        alert('User Gagal di Buat');
+      }
+    });
   });
 }
 
@@ -5852,6 +5859,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "AjaxProsessData": () => (/* binding */ AjaxProsessData),
 /* harmony export */   "AjaxProsessDataPost": () => (/* binding */ AjaxProsessDataPost),
+/* harmony export */   "AjaxProsessDataPut": () => (/* binding */ AjaxProsessDataPut),
 /* harmony export */   "ajaxProsesTextByData": () => (/* binding */ ajaxProsesTextByData),
 /* harmony export */   "buttonDelete": () => (/* binding */ buttonDelete),
 /* harmony export */   "buttonDeleteLoad": () => (/* binding */ buttonDeleteLoad),
@@ -6090,6 +6098,21 @@ function AjaxProsessDataPost(link, data, callback) {
     }
   });
 }
+function AjaxProsessDataPut(link, dataValue, callback) {
+  jquery__WEBPACK_IMPORTED_MODULE_0___default().ajax({
+    headers: {
+      'X-CSRF-TOKEN': jquery__WEBPACK_IMPORTED_MODULE_0___default()('meta[name="csrf-token"]').attr('content')
+    },
+    url: link,
+    type: 'PUT',
+    data: dataValue,
+    success: function success(data) {
+      if (callback && typeof callback === "function") {
+        callback(data);
+      }
+    }
+  });
+}
 
 /***/ }),
 
@@ -6304,13 +6327,46 @@ function prosesComplex() {
   // mulai ujian
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '.mulai-ujian-class', function () {
     var idUjian = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data');
+    var waktuUjian = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data1');
+    console.log(waktuUjian);
     if (confirm('Akan memulai ujian...?')) {
       // openFullscreen();
       jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').show();
       jquery__WEBPACK_IMPORTED_MODULE_0___default()('.content-load-class').load('ujian-siswa/mulai', function () {
+        // console.log('ujian-siswa/number/' + idUjian);
         jquery__WEBPACK_IMPORTED_MODULE_0___default()('.number-load-class').load('ujian-siswa/number/' + idUjian, function () {
           jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
         });
+
+        // membuat hitung mundur sesuai dengan waktu yang di tentukan
+        var count = localStorage.getItem("countdown") || 60 * waktuUjian; // waktu dalam menit x 60 detik
+        var timer = setInterval(function () {
+          count--;
+          localStorage.setItem("countdown", count);
+          var minutes = Math.floor(count / 60);
+          var seconds = count % 60;
+          var time = minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+          jquery__WEBPACK_IMPORTED_MODULE_0___default()("#countdown").html("Waktu Tersisa: " + time);
+          if (count == 0) {
+            clearInterval(timer);
+            alert("Waktu ujian telah berakhir!");
+            localStorage.removeItem("countdown");
+            // tambahkan kode untuk mengumpulkan jawaban atau mengakhiri ujian di sini
+
+            // post status ujian
+            var dataValue = {
+              'ujian_id': idUjian,
+              'status': 'selesai'
+            };
+            (0,_modul_ajax__WEBPACK_IMPORTED_MODULE_1__.AjaxProsessDataPost)('status-ujian-siswa', dataValue, function (data) {
+              // menghilangkan nomer
+              if (data.success == true) {
+                // menghilankan nomer ujian
+                jquery__WEBPACK_IMPORTED_MODULE_0___default()('.number-exam-class').hide();
+              }
+            });
+          }
+        }, 1000); // 1000 milidetik = 1 detik
       });
     }
   });
@@ -6329,6 +6385,23 @@ function prosesComplex() {
         jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
       });
     });
+  });
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '.selesaikan-ujian', function () {
+    // post status ujian
+    if (confirm('Ingin Menyelesaikan ujaian')) {
+      var idUjian = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data');
+      var dataValue = {
+        'ujian_id': idUjian,
+        'status': 'selesai'
+      };
+      (0,_modul_ajax__WEBPACK_IMPORTED_MODULE_1__.AjaxProsessDataPost)('status-ujian-siswa', dataValue, function (data) {
+        // menghilangkan nomer
+        if (data.success == true) {
+          // menghilankan nomer ujian
+          jquery__WEBPACK_IMPORTED_MODULE_0___default()('.number-exam-class').hide();
+        }
+      });
+    }
   });
 }
 
@@ -6472,6 +6545,34 @@ function updateDataAll() {
       (0,_modul_event__WEBPACK_IMPORTED_MODULE_2__.eventToast)(dataMessage);
     }
   });
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '.btn-aktifkan-class', function () {
+    var ujianId = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data');
+    var status = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data1');
+    var jumlahSoal = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data2');
+    var jumlahSoalPilih = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data3');
+    if (jumlahSoal == jumlahSoalPilih) {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').show();
+      // let statusUpdate = '';
+      if (status == 'aktif') {
+        var statusUpdate = 'tidak aktif';
+      } else {
+        var statusUpdate = 'aktif';
+      }
+      var dataValue = {
+        'id': ujianId,
+        'status': statusUpdate
+      };
+      (0,_modul_ajax__WEBPACK_IMPORTED_MODULE_1__.AjaxProsessDataPut)('ujian/update/status', dataValue, function (data) {
+        jquery__WEBPACK_IMPORTED_MODULE_0___default()('.content-load-class').load('ujian', function () {
+          jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
+        });
+      });
+    } else if (jumlahSoal > jumlahSoalPilih) {
+      alert('Soal yang di pilih belum sesuai dengan jumlah soal ' + jumlahSoal + "/" + jumlahSoalPilih);
+    } else if (jumlahSoal < jumlahSoalPilih) {
+      alert('Soal yang di pilih belum sesuai dengan jumlah soal ' + jumlahSoal + "/" + jumlahSoalPilih);
+    }
+  });
 }
 
 /***/ }),
@@ -6538,6 +6639,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var jquery__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery__WEBPACK_IMPORTED_MODULE_0__);
 
 function viewAll() {
+  jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('click', '.collapsible-click-class', function () {
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').show();
+    var ujiaId = jquery__WEBPACK_IMPORTED_MODULE_0___default()('input[name="ujian_id_input"]').val();
+    var bankSoalId = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data');
+    var idDiv = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).attr('data1');
+    jquery__WEBPACK_IMPORTED_MODULE_0___default()('#collapsible-id-' + idDiv).load('view-soal-in-ujian/' + bankSoalId + "/" + ujiaId, function () {
+      jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').hide();
+    });
+  });
   jquery__WEBPACK_IMPORTED_MODULE_0___default()(document).on('change', 'select[name="kelas_id_select"]', function () {
     jquery__WEBPACK_IMPORTED_MODULE_0___default()('.progress').show();
     var valueKelasId = jquery__WEBPACK_IMPORTED_MODULE_0___default()(this).val();

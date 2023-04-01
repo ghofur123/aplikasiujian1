@@ -2,8 +2,13 @@
     <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large">
         <i class="material-icons">menu</i>
     </a>
+    {{auth()->user()->name}} /
+    {{auth()->user()->role}}
+
+
 </nav>
 <ul id="slide-out" class="sidenav">
+    @if (auth()->user()->role == "guru")
     <li class="menu-item" link="lembaga">
         <a href="#">
             <i class="material-icons">account_balance</i>Lembaga
@@ -59,6 +64,7 @@
             <i class="material-icons">account_circle</i>Users
         </a>
     </li>
+    @elseif (auth()->user()->role == "siswa")
     <li>
         <div class="divider"></div>
     </li>
@@ -68,12 +74,17 @@
             <i class="material-icons">alarm</i>Ujian
         </a>
     </li>
+    @else
+
+    @endif
+
+
     <li><a class="subheader">Subheader</a></li>
-    <li class="menu-item" link="setting">
+    {{-- <li class="menu-item" link="setting">
         <a href="#">
             <i class="material-icons">build</i>Pengaturan
         </a>
-    </li>
+    </li> --}}
     <li class="menu-item" link="logout">
         <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             <i class="material-icons">close</i>Log out

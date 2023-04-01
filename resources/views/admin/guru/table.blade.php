@@ -13,6 +13,12 @@
                 <li><a href="download-file/template-data-guru.xlsx">Excel</a></li>
                 <li><a href="#">Word</a></li>
             </ul>
+            <a class='dropdown-trigger btn' href='#' data-target='dropdown-users'>Guru Users</a>
+            <ul id='dropdown-users' class='dropdown-content'>
+                <li id="create-users-guru" data=""><a href="#">Create Users</a></li>
+                <li id="kartu-guru-class" data=""><a href="#">Kartu Guru</a></li>
+            </ul>
+
         </div>
         <div class="card-content ">
             <span class="card-title">{{ $title }}</span>

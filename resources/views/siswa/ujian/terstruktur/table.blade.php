@@ -10,8 +10,6 @@
                         <th>jumlah soal</th>
                         <th>waktu</th>
                         <th>mapel</th>
-                        <th>status</th>
-                        <th>metode</th>
                         <th>ACT</th>
                     </tr>
                 </thead>
@@ -27,10 +25,8 @@
                         <td>{{ $item->jumlah_soal }}</td>
                         <td>{{ $item->waktu }}</td>
                         <td>{{ $item->mapel->nama }}</td>
-                        <td>{{ $item->status }}</td>
-                        <td>{{ $item->metode }}</td>
                         <td>
-                            <button type="button" class="btn mulai-ujian-class" data="{{Crypt::encrypt($item->id)}}">Mulai Ujian</button>
+                            <button type="button" class="btn mulai-ujian-class" data="{{Crypt::encrypt($item->id)}}" data1="{{ $item->waktu }}">Mulai Ujian</button>
                         </td>
                     </tr>
                     @endforeach
